@@ -1,84 +1,67 @@
-# Turborepo starter
+# Turborepo + Shadcn/ui + Tailwind CSS v4 + Next.js + Nestjs Boilerplate
 
-This Turborepo starter is maintained by the Turborepo core team.
+A latest, fully configured boilerplate for building applications with Turborepo, Shadcn/ui, Tailwind CSS v4, Next.js, and Nestjs.
 
-## Using this example
+## Overview
 
-Run the following command:
+I created this setup to share after completing the migration process from Tailwind CSS v3 to v4 in a monorepo structure, as I found it difficult to find documentation on this. It offers a ready-to-use configuration with Turborepo, Tailwind CSS v4, Shadcn/ui, and Next.js.
 
-```sh
-npx create-turbo@latest
+## Getting Started
+
+```bash
+
+# Install dependencies
+pnpm install
+
+# Run the development server
+pnpm run dev
 ```
 
-## What's inside?
+OR
 
-This Turborepo includes the following packages/apps:
+Use this button:
 
-### Apps and Packages
+[<img width="170" alt="img" src="https://github.com/user-attachments/assets/41c60816-2cd9-4f1f-946d-e29bb6fb15e9" />](https://github.com/new?template_name=turborepo-shadcn-tailwind-v4&template_owner=bytaesu)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## Boilerplate Structure
 
 ```
-cd my-turborepo
-pnpm build
+.
+├── apps
+│   └── nextjs                # Next.js application
+│       ├── src
+│       │   ├── app
+│       │   │   └── globals.css # Critical configuration here
+│       │   └── ...
+│       └── ...
+├── packages
+│   ├── eslint-config         # ESLint configuration
+│   ├── typescript-config     # TypeScript configuration
+│   ├── ui                    # Internal UI package (including shadcn)
+│       ├── src
+│       │    ├── components    # components
+│       │    ├── hooks         # hooks
+│       │    ├── lib           # lib
+│       │    └── styles        # CSS and styling files
+│       │── components.json  # Shadcn CLI configuration
+│       └── ...
+│   └── ...
+└── ...
 ```
 
-### Develop
+## Critical Configuration
 
-To develop all apps and packages, run the following command:
+[> Tailwind CSS docs](https://tailwindcss.com/docs/detecting-classes-in-source-files)
 
-```
-cd my-turborepo
-pnpm dev
-```
+The most important part of this setup is the `/src/app/globals.css` file in the Next.js application. Proper configuration of the `@source` directive is essential for the UI package to work correctly:
 
-### Remote Caching
+```css
+@import 'tailwindcss';
+@import '@repo/ui/styles/default.css';
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+@source '../../node_modules/@repo/ui';
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## License
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+MIT
