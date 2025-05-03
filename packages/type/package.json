@@ -1,0 +1,12 @@
+{
+  "name": "@repo/type",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "private": true,
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0"
+  }
+}
