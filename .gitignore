@@ -41,3 +41,7 @@ yarn-error.log*
 
 # Storybook
 storybook-static
+
+
+# TypeScript incremental cache
+tsconfig.tsbuildinfo

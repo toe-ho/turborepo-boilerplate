@@ -58,8 +58,8 @@ export class HttpLoggerMiddleware implements NestMiddleware {
         body: JSON.stringify(body),
         query: JSON.stringify(query),
         params: JSON.stringify(params),
-        respondCode: statusCode,
-        respondBody: truncatedResponseBody,
+        responseCode: statusCode,
+        responseBody: truncatedResponseBody,
       };
 
       console.log(`=====================================\n`);

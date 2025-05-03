@@ -1,6 +1,6 @@
 import { APP_GUARD } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
@@ -9,12 +9,23 @@ import { defaultAppDatabaseOptions } from 'src/infrastructure/persistence/DataOp
 import { AppDataSource } from 'src/infrastructure/persistence/DataSource';
 import { JwtAuthGuard } from 'src/guard/JwtAuthGuard';
 import { DataSource } from 'typeorm';
+import { JwtStrategy } from 'src/infrastructure/auth/JwtStrategy';
+import { UserModel } from 'src/infrastructure/persistence/models/UserModel';
+import { OrganizationEmployeeModel } from 'src/infrastructure/persistence/models/OrganizationEmployeeModel';
+import { OrganizationRoleModel } from 'src/infrastructure/persistence/models/OrganizationRoleModel';
+import { OrganizationModel } from 'src/infrastructure/persistence/models/OrganizationModel';
+import { UserService } from 'src/application/services/impl/UserService';
+import { UserRepository } from 'src/infrastructure/repositories/UserRepository';
+import { HttpUserContextService } from 'src/application/contexts/user/HttpUserContextService';
+import { IUserContextToken } from 'src/application/contexts/user/IUserContext';
+import { HttpRequestContext } from 'src/application/contexts/HttpRequestContext';
+import { AxiosFactoryService } from 'src/application/factories/axios/AxiosFactoryService';
+import { HttpLogModel } from 'src/infrastructure/persistence/models/HttpLogModel';
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: appConfig.jwt.secret,
-      signOptions: { expiresIn: appConfig.jwt.expiresIn },
+      secret: appConfig.supabase.jwtSecret
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
@@ -30,10 +41,15 @@ import { DataSource } from 'typeorm';
     //   prettyPrint: process.env.NODE_ENV === 'local',
     // }),
     TypeOrmModule.forFeature([
-      
+      HttpLogModel,
+      UserModel,
+      OrganizationModel,
+      OrganizationEmployeeModel,
+      OrganizationRoleModel,
     ]),
   ],
   providers: [
+    JwtStrategy,
     {
       provide: 'DataSource',
       useFactory: async () => {
@@ -47,12 +63,37 @@ import { DataSource } from 'typeorm';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    HttpRequestContext,
+    {
+      provide: IUserContextToken,
+      useClass: HttpUserContextService,
+    },
+
+
+    // repository
+    UserRepository,
+
+    // service
+    AxiosFactoryService,
+    UserService,
   ],
   exports: [
     PassportModule,
     CqrsModule,
     TypeOrmModule,
     JwtModule,
+    JwtStrategy,
+
+    // service
+    AxiosFactoryService,
+    UserService,
+
+    // repository
+    UserRepository,
+
+
+
+    IUserContextToken,
   ],
 })
 export class SharedModule {}

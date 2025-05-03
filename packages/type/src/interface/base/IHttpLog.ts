@@ -8,6 +8,6 @@ export interface IHttpLog extends IBaseEntity {
   query: string;
   params: string;
   responseTime: number;
-  respondCode: number;
-  respondBody: string;
+  responseCode: number;
+  responseBody: string;
 }
